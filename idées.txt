@@ -1,0 +1,7 @@
+QRcode generator:
+
+Fonctionnalités:
+-pouvoir choisir l'extension(.png, .jpg, .webp)
+-pouvoir insérer un logo
+-pouvoir choisir la couleur(fill/back colo)
+-pouvoir choisir la taille(tailles prédéfinies)
