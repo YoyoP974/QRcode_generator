@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import colorchooser
 from tkinter import filedialog
+from tkinter import messagebox
 import qrcode
 from qrcode.constants import ERROR_CORRECT_L
 import os
@@ -11,6 +12,8 @@ from PIL import Image
 fill = "#FFFFFF"
 back = "#000000"
 fill_path = ""
+url = ""
+taille_liste = ["Petit", "Grand"]
 
 def fillColor():
     global fill
@@ -29,18 +32,24 @@ def backColor():
 def openFile():
     global file_path
     file_path = filedialog.askopenfilename(title="QRgenerator - Choisir un logo",
+                                           initialdir="~/Images",
                                            filetypes=[("PNG", "*.png"), ("JPG", "*.jpg"), ("WEPB", "*.webp")])
     file = open(file_path, 'r')
     print(file_path)
     file.close
 
 def Download():
-    global fill, back, file_path
+    global fill, back, file_path, url
     url = url_input.get()
     extension_val = extension.get()
     fill_input_val = fill_input.get()
     back_input_val = back_input.get()
     now = datetime.now()
+
+    #user_file_path = filedialog.askopenfilename(title="QRgenerator - Télécharger")
+    #user_file = open(user_file_path, 'r')
+    #print(file_path)
+    #user_file.close
 
     if fill_input_val != "":
         fill = fill_input_val
@@ -98,20 +107,38 @@ def Download():
 def addLogo():
     logo_root = Tk()
     logo_root.title("QRcode generator - Ajouter un logo")
+    logo_root.geometry("200x115")
 
     Label(logo_root, text="Logo: ").place(x=20, y=15)
     file_btn = Button(logo_root, text="Choisir le logo", command=openFile)
     file_btn.place(x=100, y=15)
+    taille = ttk.Combobox(logo_root, values=taille_liste)
+    taille.current(0)
+    taille.place(x=20, y=45)
     quit_btn = Button(logo_root, text="Terminé", command=logo_root.destroy)
-    quit_btn.place(x=20, y=45)
+    quit_btn.place(x=20, y=75)
 
     logo_root.mainloop()
+
+def reinitialiser():
+    global fill, back, file_path, url
+    reponse = messagebox.askokcancel("QRcode generator - Réinitialiser", "Voulez-vous vraiment réinitialiser tous les paramètres ?")
+    if reponse:
+        print("Réinitialisation des paramètres")
+        fill_input.delete(0, END)
+        fill = "#ffffff"
+        back_input.delete(0, END)
+        back = "#000000"
+        url_input.delete(0, END)
+        url = ""
+        file_path = ""
+
 
 # _________________________
 #|___________UI____________|
 #Création de la fenêtre
 
-extension_liste = ["PNG", "JPG", "WEPB"]
+extension_liste = ["PNG", "JPG", "WEBP"]
 root = Tk()
 root.title("QRcode generator")
 root.geometry("600x200")
@@ -155,6 +182,10 @@ extension.place(x=200, y=105)
 
 logo_btn = Button(root, text="Ajouter un logo", command=addLogo)
 logo_btn.place(x=20, y=135)
+
+#Réinitialiser
+rein_btn = Button(root, text="Réinitialiser", command=reinitialiser)
+rein_btn.place(x=250, y=135)
 
 #Téléchargement
 
