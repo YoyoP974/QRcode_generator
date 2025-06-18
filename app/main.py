@@ -11,7 +11,7 @@ from PIL import Image
 
 fill = "#FFFFFF"
 back = "#000000"
-fill_path = ""
+file_path = ""
 url = ""
 taille_liste = ["Petit", "Grand"]
 
@@ -100,6 +100,12 @@ def Download():
 
     # Créer le dossier s'il n'existe pas
     os.makedirs(chemin_dossier, exist_ok=True)
+
+    print(url)
+    print(fill)
+    print(back)
+    print(extension_val)
+    print(name)
 
     # Enregistrer l’image
     img.save(chemin_complet)
