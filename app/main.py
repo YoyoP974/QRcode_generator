@@ -14,6 +14,7 @@ back = "#000000"
 file_path = ""
 url = ""
 taille_liste = ["Petit", "Grand"]
+taille = ""
 
 def fillColor():
     global fill
@@ -39,12 +40,13 @@ def openFile():
     file.close
 
 def Download():
-    global fill, back, file_path, url
+    global fill, back, file_path, url, taille
     url = url_input.get()
     extension_val = extension.get()
     fill_input_val = fill_input.get()
     back_input_val = back_input.get()
     now = datetime.now()
+    taille_val = taille.get()
 
     #user_file_path = filedialog.askopenfilename(title="QRgenerator - Télécharger")
     #user_file = open(user_file_path, 'r')
@@ -82,7 +84,10 @@ def Download():
             logo = Image.open(file_path)
 
             qr_width, qr_height = img.size
-            logo_size = int(qr_width * 0.2)
+            if taille_val == "Petit":
+                logo_size = int(qr_width * 0.2)
+            elif taille_val == "Grand":
+                logo_size = int(qr_width * 0.3)
             logo = logo.resize((logo_size, logo_size), Image.Resampling.LANCZOS)
 
             # Positionner le logo au centre
@@ -111,10 +116,15 @@ def Download():
     img.save(chemin_complet)
 
 def addLogo():
-    logo_root = Tk()
+    global taille
+    logo_root = Toplevel(root)
     logo_root.title("QRcode generator - Ajouter un logo")
     logo_root.geometry("200x115")
     logo_root.resizable(width=False, height=False)
+
+    logo_root.transient(root)  # Fenêtre secondaire liée à root
+    logo_root.grab_set()       # Modal : empêche d'interagir avec root tant que logo_root est ouvert
+    logo_root.focus_force()    # Force le focus sur la fenêtre secondaire
 
     Label(logo_root, text="Logo: ").place(x=20, y=15)
     file_btn = Button(logo_root, text="Choisir le logo", command=openFile)
