@@ -1,1 +1,2 @@
-qrcode/
+# Ignorer le dossier app/qrcode
+/app/qrcode/
