@@ -19,21 +19,43 @@ taille = ""
 def fillColor():
     global fill
     fill_color = colorchooser.askcolor()
-    fill = fill_color[1]
+    if fill_color[1] is not None:
+        fill = fill_color[1]
+        preview_fill.config(bg=fill)
+        fill_input.delete(0, END)
+        fill_input.insert(0, fill)
     print(fill)
     return fill
 
 def backColor():
     global back
     back_color = colorchooser.askcolor()
-    back = back_color[1]
+    if back_color[1] is not None:
+        back = back_color[1]
+        preview_back.config(bg=back)
+        back_input.delete(0, END)
+        back_input.insert(0, back)
     print(back)
     return back
+
+def update_fill_preview(event=None):
+    global fill
+    val = fill_input.get()
+    if val.startswith("#") and (len(val) == 7 or len(val) == 4):  # simple validation HEX
+        fill = val
+        preview_fill.config(bg=fill)
+
+def update_back_preview(event=None):
+    global back
+    val = back_input.get()
+    if val.startswith("#") and (len(val) == 7 or len(val) == 4):
+        back = val
+        preview_back.config(bg=back)
 
 def openFile():
     global file_path
     file_path = filedialog.askopenfilename(title="QRgenerator - Choisir un logo",
-                                           initialdir="~/Images",
+                                           initialdir="~/Pictures",
                                            filetypes=[("PNG", "*.png"), ("JPG", "*.jpg"), ("WEPB", "*.webp")])
     file = open(file_path, 'r')
     print(file_path)
@@ -46,7 +68,6 @@ def Download():
     fill_input_val = fill_input.get()
     back_input_val = back_input.get()
     now = datetime.now()
-    taille_val = taille.get()
 
     #user_file_path = filedialog.askopenfilename(title="QRgenerator - Télécharger")
     #user_file = open(user_file_path, 'r')
@@ -81,6 +102,7 @@ def Download():
     img = qr.make_image(fill_color = fill, back_color = back)
 
     if file_path != "":
+            taille_val = taille.get()
             logo = Image.open(file_path)
 
             qr_width, qr_height = img.size
@@ -100,11 +122,14 @@ def Download():
                 img.paste(logo, pos)
 
     chemin_dossier = os.path.expanduser("E:/python/QRcode/app/qrcode/")
+    download_chemin_dossier = os.path.expanduser("~/Downloads")
     nom_fichier = name
     chemin_complet = os.path.join(chemin_dossier, nom_fichier)
+    download_chemin_complet = os.path.join(download_chemin_dossier, nom_fichier)
 
     # Créer le dossier s'il n'existe pas
     os.makedirs(chemin_dossier, exist_ok=True)
+    os.makedirs(download_chemin_dossier, exist_ok=True)
 
     print(url)
     print(fill)
@@ -114,6 +139,7 @@ def Download():
 
     # Enregistrer l’image
     img.save(chemin_complet)
+    img.save(download_chemin_complet)
 
 def addLogo():
     global taille
@@ -170,23 +196,29 @@ url_input.place(x=200, y=15, width=335)
 #Partie couleur de remlplissage
 
 Label(root, text="Couleur de remplissage: ").place(x=20, y=45)
-#preview_fill = Canvas(root, width=20, height=20, bg=fill).place(x=165, y=45)
+preview_fill = Canvas(root, width=20, height=20, bg=fill)
+preview_fill.place(x=550, y=45)
 fill_button = Button(text="Choisir une couleur", command=fillColor)
 fill_button.place(x=200, y=45)
-Label(root, text="ou code HEX").place(x=325, y=45)
+Label(root, text="code HEX: ").place(x=330, y=45)
 fill_input = Entry(root)
 fill_input.place(x=415,y=45)
+
+fill_input.bind("<KeyRelease>", update_fill_preview)
 
 
 #Partie couleur de fond
 
 Label(root, text="Couleur de fond: ").place(x=20, y=75)
-#preview_back = Canvas(root, width=20, height=20, bg=back).place(x=165, y=75)
+preview_back = Canvas(root, width=20, height=20, bg=back)
+preview_back.place(x=550, y=75)
 back_button = Button(root, text="Choisir une couleur", command=backColor)
 back_button.place(x=200, y=75)
-Label(root, text="ou code HEX").place(x=325, y=75)
+Label(root, text="code HEX: ").place(x=330, y=75)
 back_input = Entry(root)
 back_input.place(x=415, y=75)
+
+back_input.bind("<KeyRelease>", update_back_preview)
 
 #Partie sélection de l'extension
 
