@@ -7,10 +7,10 @@ import qrcode
 from qrcode.constants import ERROR_CORRECT_L
 import os
 from datetime import datetime
-from PIL import Image
+from PIL import Image, ImageTk
 
-fill = "#FFFFFF"
-back = "#000000"
+fill = "#000000"
+back = "#FFFFFF"
 file_path = ""
 url = ""
 taille_liste = ["Petit", "Grand"]
@@ -140,6 +140,7 @@ def Download():
     # Enregistrer l’image
     img.save(chemin_complet)
     img.save(download_chemin_complet)
+    messagebox.showinfo("Télécgarement", "Le QRcode a été télécgargé dans votre de dossier Télécgargements")
 
 def addLogo():
     global taille
@@ -147,6 +148,7 @@ def addLogo():
     logo_root.title("QRcode generator - Ajouter un logo")
     logo_root.geometry("200x115")
     logo_root.resizable(width=False, height=False)
+    logo_root.iconbitmap(r"E:\python\QRcode\app\logo_qrcode_generator.ico")
 
     logo_root.transient(root)  # Fenêtre secondaire liée à root
     logo_root.grab_set()       # Modal : empêche d'interagir avec root tant que logo_root est ouvert
@@ -169,12 +171,41 @@ def reinitialiser():
     if reponse:
         print("Réinitialisation des paramètres")
         fill_input.delete(0, END)
-        fill = "#ffffff"
+        fill = "#000000"
         back_input.delete(0, END)
-        back = "#000000"
+        back = "#FFFFFF"
         url_input.delete(0, END)
         url = ""
         file_path = ""
+
+def About():
+    about_root = Toplevel(root)
+    about_root.title("QRcode generator - A propos")
+    about_root.geometry("250x160")
+    about_root.resizable(width=False, height=False)
+    about_root.iconbitmap(r"E:\python\QRcode\app\logo_qrcode_generator.ico")
+
+    about_root.transient(root)  # Fenêtre secondaire liée à root
+    about_root.grab_set()       # Modal : empêche d'interagir avec root tant que about_root est ouvert
+    about_root.focus_force()    # Force le focus sur la fenêtre secondaire
+
+    
+    pil_image = Image.open(r"E:\python\QRcode\app\logo_qrcode_generator.png")
+    pil_image = pil_image.resize((50, 50))  # Redimensionner à 50x50 pixels
+
+    logo = ImageTk.PhotoImage(pil_image)
+
+    logo_canva = Canvas(about_root, width=50, height=50)
+    item = logo_canva.create_image(25, 25, image = logo)
+     
+    #Rajouter cette ligne
+    logo_canva.image = logo
+    logo_canva.pack()
+    Label(about_root, text="QRcode génerator").pack()
+    Label(about_root, text="crée par PIA Yoni").pack()
+    Label(about_root, text="2025").pack()
+    Label(about_root, text="Email: yoni.pia54@gmail.com").pack()
+    Label(about_root, text="Github: https://github.com/YoyoP974/").pack()
 
 
 # _________________________
@@ -186,6 +217,7 @@ root = Tk()
 root.title("QRcode generator")
 root.geometry("600x200")
 root.resizable(width=False, height=False)
+root.iconbitmap(r"E:\python\QRcode\app\logo_qrcode_generator.ico")
 
 #Partie URL
 
@@ -240,5 +272,10 @@ rein_btn.place(x=250, y=135)
 
 download = Button(root, text="Télécharger", command=Download)
 download.place(x=470, y=135)
+
+#About 
+
+about_bnt = Button(root, text="A propos", command=About)
+about_bnt.place(x=20, y=165)
 
 root.mainloop()
