@@ -114,6 +114,7 @@ def addLogo():
     logo_root = Tk()
     logo_root.title("QRcode generator - Ajouter un logo")
     logo_root.geometry("200x115")
+    logo_root.resizable(width=False, height=False)
 
     Label(logo_root, text="Logo: ").place(x=20, y=15)
     file_btn = Button(logo_root, text="Choisir le logo", command=openFile)
