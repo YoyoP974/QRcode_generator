@@ -15,6 +15,7 @@ file_path = ""
 url = ""
 taille_liste = ["Petit", "Grand"]
 taille = ""
+taille_val = ""
 
 def fillColor():
     global fill
@@ -62,7 +63,7 @@ def openFile():
     file.close
 
 def Download():
-    global fill, back, file_path, url, taille
+    global fill, back, file_path, url, taille, taille_liste, taille_val
     url = url_input.get()
     extension_val = extension.get()
     fill_input_val = fill_input.get()
@@ -102,13 +103,12 @@ def Download():
     img = qr.make_image(fill_color = fill, back_color = back)
 
     if file_path != "":
-            taille_val = taille.get()
             logo = Image.open(file_path)
 
             qr_width, qr_height = img.size
-            if taille_val == "Petit":
+            if taille_val == taille_liste[0]:
                 logo_size = int(qr_width * 0.2)
-            elif taille_val == "Grand":
+            elif taille_val == taille_liste[1]:
                 logo_size = int(qr_width * 0.3)
             logo = logo.resize((logo_size, logo_size), Image.Resampling.LANCZOS)
 
@@ -143,7 +143,7 @@ def Download():
     messagebox.showinfo("Télécgarement", "Le QRcode a été télécgargé dans votre de dossier Télécgargements")
 
 def addLogo():
-    global taille
+    global taille, logo_root
     logo_root = Toplevel(root)
     logo_root.title("QRcode generator - Ajouter un logo")
     logo_root.geometry("200x115")
@@ -160,10 +160,15 @@ def addLogo():
     taille = ttk.Combobox(logo_root, values=taille_liste)
     taille.current(0)
     taille.place(x=20, y=45)
-    quit_btn = Button(logo_root, text="Terminé", command=logo_root.destroy)
+    quit_btn = Button(logo_root, text="Terminé", command=saveLogo)
     quit_btn.place(x=20, y=75)
 
     logo_root.mainloop()
+
+def saveLogo ():
+    global taille_val, logo_root
+    taille_val = taille.get()
+    logo_root.destroy()
 
 def reinitialiser():
     global fill, back, file_path, url
