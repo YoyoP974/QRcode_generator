@@ -4,7 +4,7 @@ from tkinter import colorchooser
 from tkinter import filedialog
 from tkinter import messagebox
 import qrcode
-from qrcode.constants import ERROR_CORRECT_L
+from qrcode.constants import ERROR_CORRECT_H
 import os
 from datetime import datetime
 from PIL import Image, ImageTk
@@ -92,7 +92,7 @@ def Download():
 
     qr = qrcode.QRCode(
     version=4,
-    error_correction=ERROR_CORRECT_L,
+    error_correction=ERROR_CORRECT_H,
     box_size=10,
     border=3
     )
@@ -121,7 +121,7 @@ def Download():
             else:
                 img.paste(logo, pos)
 
-    chemin_dossier = os.path.expanduser("E:/python/QRcode/app/qrcode/")
+    chemin_dossier = os.path.expanduser(os.getcwd() + "/qrcode")
     download_chemin_dossier = os.path.expanduser("~/Downloads")
     nom_fichier = name
     chemin_complet = os.path.join(chemin_dossier, nom_fichier)
@@ -148,7 +148,7 @@ def addLogo():
     logo_root.title("QRcode generator - Ajouter un logo")
     logo_root.geometry("200x115")
     logo_root.resizable(width=False, height=False)
-    logo_root.iconbitmap(r"E:\python\QRcode\app\logo_qrcode_generator.ico")
+    logo_root.iconbitmap("logo_qrcode_generator.ico")
 
     logo_root.transient(root)  # Fenêtre secondaire liée à root
     logo_root.grab_set()       # Modal : empêche d'interagir avec root tant que logo_root est ouvert
@@ -188,14 +188,14 @@ def About():
     about_root.title("QRcode generator - A propos")
     about_root.geometry("250x160")
     about_root.resizable(width=False, height=False)
-    about_root.iconbitmap(r"E:\python\QRcode\app\logo_qrcode_generator.ico")
+    about_root.iconbitmap("logo_qrcode_generator.ico")
 
     about_root.transient(root)  # Fenêtre secondaire liée à root
     about_root.grab_set()       # Modal : empêche d'interagir avec root tant que about_root est ouvert
     about_root.focus_force()    # Force le focus sur la fenêtre secondaire
 
     
-    pil_image = Image.open(r"E:\python\QRcode\app\logo_qrcode_generator.png")
+    pil_image = Image.open("logo_qrcode_generator.ico")
     pil_image = pil_image.resize((50, 50))  # Redimensionner à 50x50 pixels
 
     logo = ImageTk.PhotoImage(pil_image)
@@ -222,7 +222,7 @@ root = Tk()
 root.title("QRcode generator")
 root.geometry("600x200")
 root.resizable(width=False, height=False)
-root.iconbitmap(r"E:\python\QRcode\app\logo_qrcode_generator.ico")
+root.iconbitmap("logo_qrcode_generator.ico")
 
 #Partie URL
 
